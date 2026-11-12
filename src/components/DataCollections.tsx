@@ -1,12 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Droplet, Leaf, Mountain, Waves, Wind } from 'lucide-react';
+import { Droplet, Leaf, Mountain, Waves, Wind } from 'lucide-react';
 import {
   DATA_COLLECTIONS,
   DataCollectionCard,
   Language,
 } from '../data/marinePlatformData';
 import { AbuDhabiMapVisual } from './AbuDhabiMapVisual';
+import {
+  EASE_EXEC,
+  ParallaxLayer,
+  SectionHeaderReveal,
+  VIEWPORT_ONCE,
+} from './ScrollMotion';
 
 interface DataCollectionsProps {
   lang: Language;
@@ -56,50 +62,8 @@ export const DataCollections: React.FC<DataCollectionsProps> = ({
   return (
     <section
       id="catalogues"
-      className="relative w-full py-9 sm:py-12 overflow-hidden bg-gradient-to-b from-[#002834]/95 via-[#00323F]/90 to-[#002733]/95"
+      className="relative w-full py-9 sm:py-12 overflow-hidden bg-gradient-to-b from-[#002834]/15 via-[#003A48]/25 to-[#002733]/15"
     >
-      {/* Subtle Ambient Aqua & Gold Flowing Ribbon Light Trails matching Section Backdrop */}
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 1440 360"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute inset-0 w-full h-full opacity-45"
-      >
-        <defs>
-          <linearGradient id="dcAquaRibbon" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#00D9E8" stopOpacity="0" />
-            <stop offset="32%" stopColor="#80F5F5" stopOpacity="0.45" />
-            <stop offset="68%" stopColor="#27C9D0" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#FFC75E" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="dcGoldRibbon" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#FFC75E" stopOpacity="0" />
-            <stop offset="48%" stopColor="#FFC75E" stopOpacity="0.32" />
-            <stop offset="85%" stopColor="#80F5F5" stopOpacity="0.42" />
-            <stop offset="100%" stopColor="#00D9E8" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M -40 42 C 260 110, 540 -20, 880 65 C 1140 128, 1300 45, 1480 18"
-          fill="none"
-          stroke="url(#dcAquaRibbon)"
-          strokeWidth="1.4"
-        />
-        <path
-          d="M -60 285 C 240 215, 580 330, 960 275 C 1220 238, 1360 280, 1490 230"
-          fill="none"
-          stroke="url(#dcGoldRibbon)"
-          strokeWidth="1.5"
-        />
-        <path
-          d="M 880 350 C 1100 315, 1280 285, 1480 322"
-          fill="none"
-          stroke="url(#dcAquaRibbon)"
-          strokeWidth="1.1"
-          opacity="0.7"
-        />
-      </svg>
-
       {/* Soft Radial Depth Glow Behind Map Stage */}
       <div
         aria-hidden="true"
@@ -108,47 +72,32 @@ export const DataCollections: React.FC<DataCollectionsProps> = ({
 
       <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-5 sm:mb-7">
-          <div>
-            <div className="flex items-center gap-4">
-              <h2 className="font-display font-extrabold text-[27px] sm:text-[32px] leading-[1.12] tracking-[-0.02em] text-white">
-                {lang === 'EN' ? 'Explore Data Collections' : 'استكشف مجموعات البيانات'}
-              </h2>
-              <span
-                aria-hidden="true"
-                className="hidden sm:block w-28 h-[2px] bg-gradient-to-r from-[#FFC75E] via-[#80F5F5]/65 to-transparent"
-              />
-            </div>
-            <p className="mt-1 text-[13.5px] sm:text-[14.5px] text-[#C6E4E8]">
-              {lang === 'EN'
-                ? 'Discover and access curated environmental datasets across key themes.'
-                : 'اكتشف مجموعات البيانات البيئية المعتمدة عبر المواضيع الرئيسية.'}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onViewAllDatasets}
-            className="group inline-flex items-center gap-2 text-[13.5px] font-semibold text-white hover:text-[#FFC75E] transition-colors self-start sm:self-auto"
-          >
-            <span>{lang === 'EN' ? 'View All Datasets' : 'عرض جميع البيانات'}</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
-          </button>
-        </div>
+        <SectionHeaderReveal
+          title={lang === 'EN' ? 'Explore Data Collections' : 'استكشف مجموعات البيانات'}
+          subtitle={
+            lang === 'EN'
+              ? 'Discover and access curated environmental datasets across key themes.'
+              : 'اكتشف مجموعات البيانات البيئية المعتمدة عبر المواضيع الرئيسية.'
+          }
+          actionLabel={lang === 'EN' ? 'View All Datasets' : 'عرض جميع البيانات'}
+          onAction={onViewAllDatasets}
+          titleClassName="text-[27px] sm:text-[32px] leading-[1.12]"
+          className="mb-5 sm:mb-7"
+        />
 
         {/* Left Illuminated 3D Abu Dhabi Map + Right 5 Frosted Glass Dataset Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] xl:grid-cols-[390px_1fr] gap-6 lg:gap-5 items-center">
           {/* Left Side — Holographic 3D Abu Dhabi Geographical Map */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.65 }}
+            initial={{ opacity: 0, x: -34, scale: 0.92 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={VIEWPORT_ONCE}
+            transition={{ duration: 0.75, ease: EASE_EXEC }}
             className="flex flex-col items-center justify-center min-h-[195px] sm:min-h-[215px]"
           >
-            <AbuDhabiMapVisual
-              onSelectStation={() => onViewAllDatasets()}
-            />
+            <ParallaxLayer offsetY={16} className="w-full flex justify-center">
+              <AbuDhabiMapVisual onSelectStation={() => onViewAllDatasets()} />
+            </ParallaxLayer>
           </motion.div>
 
           {/* Right Side — 5 Compact Frosted Glass Dataset Cards */}
@@ -164,10 +113,10 @@ export const DataCollections: React.FC<DataCollectionsProps> = ({
                   <motion.button
                     key={card.id}
                     type="button"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.48, delay: idx * 0.06 }}
+                    initial={{ opacity: 0, y: 32, scale: 0.94 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={VIEWPORT_ONCE}
+                    transition={{ duration: 0.55, delay: 0.08 + idx * 0.075, ease: EASE_EXEC }}
                     onClick={() => onSelectCollection(card)}
                     className="hover-sheen group relative snap-start shrink-0 w-[152px] sm:w-[162px] lg:w-full h-[186px] sm:h-[194px] rounded-[16px] overflow-hidden text-left ead-glass-card ead-rim-glint hover:-translate-y-1.5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D9E8]"
                     style={{

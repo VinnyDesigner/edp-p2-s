@@ -233,6 +233,34 @@
   }
 }
 
+@keyframes orbDrift {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) scale(1);
+    opacity: 0.78;
+  }
+  50% {
+    transform: translate3d(28px, -18px, 0) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes moteRise {
+  0% {
+    transform: translate3d(0px, 14px, 0) scale(0.75);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.55;
+  }
+  80% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate3d(12px, -44px, 0) scale(1.1);
+    opacity: 0;
+  }
+}
+
 .animate-hero-zoom {
   animation: slowZoom 24s ease-in-out infinite;
 }
@@ -251,6 +279,45 @@
 
 .animate-wave-scroll {
   animation: waveScroll 10s ease-in-out infinite;
+}
+
+.animate-orb-drift {
+  animation: orbDrift 18s ease-in-out infinite;
+}
+
+.animate-mote-rise {
+  animation: moteRise 16s ease-in-out infinite;
+}
+
+@keyframes auroraFloat {
+  0%, 100% {
+    transform: translate3d(0px, 0px, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(48px, -28px, 0) scale(1.06) rotate(4deg);
+  }
+  66% {
+    transform: translate3d(-36px, 24px, 0) scale(0.96) rotate(-3deg);
+  }
+}
+
+@keyframes prismGlide {
+  0%, 100% {
+    transform: translate3d(-8%, 0%, 0) skewX(-22deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(14%, 0%, 0) skewX(-22deg);
+    opacity: 0.72;
+  }
+}
+
+.animate-aurora-float {
+  animation: auroraFloat 24s ease-in-out infinite;
+}
+
+.animate-prism-glide {
+  animation: prismGlide 20s ease-in-out infinite;
 }
 
 /* Hide scrollbars cleanly */

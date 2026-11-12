@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar } from 'lucide-react';
 import { LATEST_UPDATES, Language, UpdateArticle } from '../data/marinePlatformData';
+import { EASE_EXEC, SectionHeaderReveal, VIEWPORT_ONCE } from './ScrollMotion';
 
 interface LatestUpdatesProps {
   lang: Language;
@@ -21,43 +22,29 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({
     >
       <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-9">
-          <div>
-            <div className="flex items-center gap-4">
-              <h2 className="font-display font-extrabold text-[28px] sm:text-[34px] tracking-[-0.02em] text-white">
-                {lang === 'EN' ? 'Latest Updates' : 'آخر المستجدات'}
-              </h2>
-              <span
-                aria-hidden="true"
-                className="hidden sm:block w-24 h-[2px] bg-gradient-to-r from-[#FFC75E] via-[#80F5F5]/60 to-transparent"
-              />
-            </div>
-            <p className="mt-1.5 text-[14px] sm:text-[15px] text-[#C6E4E8]">
-              {lang === 'EN'
-                ? 'Platform news, new datasets, insights and key announcements.'
-                : 'أخبار المنصة ومجموعات البيانات الجديدة والرؤى والإعلانات الرئيسية.'}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onViewAllUpdates}
-            className="group inline-flex items-center gap-2 text-[13.5px] font-semibold text-white hover:text-[#FFC75E] transition-colors self-start sm:self-auto"
-          >
-            <span>{lang === 'EN' ? 'View All Updates' : 'عرض جميع المستجدات'}</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
-          </button>
-        </div>
+        <SectionHeaderReveal
+          title={lang === 'EN' ? 'Latest Updates' : 'آخر المستجدات'}
+          subtitle={
+            lang === 'EN'
+              ? 'Platform news, new datasets, insights and key announcements.'
+              : 'أخبار المنصة ومجموعات البيانات الجديدة والرؤى والإعلانات الرئيسية.'
+          }
+          actionLabel={lang === 'EN' ? 'View All Updates' : 'عرض جميع المستجدات'}
+          onAction={onViewAllUpdates}
+          titleClassName="text-[28px] sm:text-[34px]"
+          lineWidthClassName="w-24"
+          className="mb-8 sm:mb-9"
+        />
 
         {/* 3 Horizontal News Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {LATEST_UPDATES.map((article, idx) => (
             <motion.article
               key={article.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, delay: idx * 0.08 }}
+              initial={{ opacity: 0, y: 36, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={VIEWPORT_ONCE}
+              transition={{ duration: 0.65, delay: idx * 0.1, ease: EASE_EXEC }}
               onClick={() => onSelectArticle(article)}
               className="hover-sheen group cursor-pointer relative min-h-[296px] sm:min-h-[308px] rounded-[20px] overflow-hidden ead-glass-card ead-rim-glint hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >

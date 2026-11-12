@@ -16,6 +16,13 @@ import {
   Wind,
 } from 'lucide-react';
 import { Language, SMART_APPLICATIONS, SmartApplication } from '../data/marinePlatformData';
+import {
+  EASE_EXEC,
+  ParallaxLayer,
+  RevealItem,
+  SectionHeaderReveal,
+  VIEWPORT_ONCE,
+} from './ScrollMotion';
 
 interface SmartApplicationsProps {
   lang: Language;
@@ -70,13 +77,35 @@ export const SmartApplications: React.FC<SmartApplicationsProps> = ({
 }) => {
   const [selectedId, setSelectedId] = useState<string>('avatar');
   const [liveIframeActive, setLiveIframeActive] = useState(false);
+  const [isShowcaseHovered, setIsShowcaseHovered] = useState(false);
 
+  const selectedIndex = SMART_APPLICATIONS.findIndex((a) => a.id === selectedId);
   const selectedApp =
-    SMART_APPLICATIONS.find((a) => a.id === selectedId) || SMART_APPLICATIONS[0];
+    (selectedIndex >= 0 ? SMART_APPLICATIONS[selectedIndex] : undefined) ||
+    SMART_APPLICATIONS[0];
 
   useEffect(() => {
     setLiveIframeActive(false);
   }, [selectedId]);
+
+  // Auto-cycle through smart application screens when idle; pauses on hover or live iframe
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+    if (isShowcaseHovered || liveIframeActive) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      const currentIdx = selectedIndex >= 0 ? selectedIndex : 0;
+      const nextIdx = (currentIdx + 1) % SMART_APPLICATIONS.length;
+      setSelectedId(SMART_APPLICATIONS[nextIdx].id);
+    }, 5200);
+    return () => window.clearInterval(timer);
+  }, [selectedIndex, isShowcaseHovered, liveIframeActive]);
 
   const cleanDomain = selectedApp.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
@@ -95,145 +124,87 @@ export const SmartApplications: React.FC<SmartApplicationsProps> = ({
         }}
       />
 
-      {/* Luminous Cyber-Oceanic Flowing Energy Waves */}
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 1440 460"
-        className="pointer-events-none absolute inset-0 w-full h-full opacity-55"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <linearGradient id="appRibbonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#00D9E8" stopOpacity="0.05" />
-            <stop offset="28%" stopColor="#80F5F5" stopOpacity="0.6" />
-            <stop offset="56%" stopColor="#FFC75E" stopOpacity="0.55" />
-            <stop offset="85%" stopColor="#00D9E8" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#80F5F5" stopOpacity="0.05" />
-          </linearGradient>
-          <linearGradient id="appRibbonGold" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#FFC75E" stopOpacity="0" />
-            <stop offset="42%" stopColor="#FFC75E" stopOpacity="0.48" />
-            <stop offset="76%" stopColor="#80F5F5" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#FFC75E" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M-40 38 C 280 88, 560 12, 920 62 C 1180 96, 1340 42, 1490 22"
-          stroke="url(#appRibbonCyan)"
-          strokeWidth="1.4"
-          fill="none"
-        />
-        <path
-          d="M-30 56 C 320 18, 660 88, 1020 34 C 1240 6, 1360 54, 1480 42"
-          stroke="url(#appRibbonGold)"
-          strokeWidth="1"
-          strokeDasharray="2 5"
-          fill="none"
-          opacity="0.7"
-        />
-        <path
-          d="M-40 340 C 160 405, 380 435, 720 408 C 1020 384, 1250 438, 1490 315"
-          stroke="url(#appRibbonCyan)"
-          strokeWidth="1.8"
-          fill="none"
-          className="animate-wave-scroll"
-        />
-        <path
-          d="M-40 368 C 200 435, 480 448, 760 418 C 1060 386, 1280 412, 1490 348"
-          stroke="url(#appRibbonGold)"
-          strokeWidth="1.4"
-          fill="none"
-        />
-        <path
-          d="M-20 392 C 250 446, 540 422, 820 435 C 1110 448, 1320 365, 1480 375"
-          stroke="url(#appRibbonCyan)"
-          strokeWidth="1.1"
-          strokeDasharray="1.5 6"
-          opacity="0.8"
-          fill="none"
-        />
-      </svg>
-
       <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
-          <div>
-            <div className="flex items-center gap-4">
-              <h2 className="font-display font-extrabold text-[27px] sm:text-[33px] tracking-[-0.02em] text-white">
-                {lang === 'EN' ? 'Explore Smart Applications' : 'استكشف التطبيقات الذكية'}
-              </h2>
-              <span
-                aria-hidden="true"
-                className="hidden sm:block w-28 h-[2px] bg-gradient-to-r from-[#FFC75E] via-[#80F5F5]/65 to-transparent"
-              />
-            </div>
-            <p className="mt-1.5 text-[13.5px] sm:text-[14.5px] text-[#C6E4E8]">
-              {lang === 'EN'
-                ? 'A curated application experience hub to turn environmental data into real-world insights.'
-                : 'مركز تطبيقات مختار لتحويل البيانات البيئية إلى رؤى عملية.'}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={onViewAllApps}
-            className="group inline-flex items-center gap-2 text-[13.5px] font-semibold text-white hover:text-[#FFC75E] transition-colors self-start sm:self-auto"
-          >
-            <span>{lang === 'EN' ? 'View All Applications' : 'عرض جميع التطبيقات'}</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
-          </button>
-        </div>
+        <SectionHeaderReveal
+          title={lang === 'EN' ? 'Explore Smart Applications' : 'استكشف التطبيقات الذكية'}
+          subtitle={
+            lang === 'EN'
+              ? 'A curated application experience hub to turn environmental data into real-world insights.'
+              : 'مركز تطبيقات مختار لتحويل البيانات البيئية إلى رؤى عملية.'
+          }
+          actionLabel={lang === 'EN' ? 'View All Applications' : 'عرض جميع التطبيقات'}
+          onAction={onViewAllApps}
+        />
 
         {/* Three-Column Interactive Laptop Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-5 items-center">
+        <div
+          onMouseEnter={() => setIsShowcaseHovered(true)}
+          onMouseLeave={() => setIsShowcaseHovered(false)}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-5 items-center"
+        >
           {/* LEFT COLUMN — 5 Stacked Interactive Application Buttons */}
           <div className="lg:col-span-3 space-y-2.5">
-            {SMART_APPLICATIONS.map((app) => {
+            {SMART_APPLICATIONS.map((app, idx) => {
               const isSelected = app.id === selectedApp.id;
               const sub = APP_SUBTITLES[app.id];
               return (
-                <button
+                <motion.div
                   key={app.id}
-                  type="button"
-                  onClick={() => setSelectedId(app.id)}
-                  className={`hover-sheen relative w-full rounded-[14px] px-4 py-2.5 flex items-center gap-3.5 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC75E] ${
-                    isSelected
-                      ? 'bg-gradient-to-r from-[#024F5D]/88 via-[#003E4E]/84 to-[#002D3A]/92 golden-glow-card ead-rim-glint-gold text-white scale-[1.015]'
-                      : 'ead-glass-card ead-rim-glint text-[#E2F3F6] hover:text-white'
-                  }`}
+                  initial={{ opacity: 0, x: -28 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={VIEWPORT_ONCE}
+                  transition={{ duration: 0.5, delay: idx * 0.075, ease: EASE_EXEC }}
                 >
-                  {isSelected && (
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute -bottom-px left-1/2 -translate-x-1/2 w-[72%] h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#FFE8A3] to-transparent shadow-[0_0_16px_3px_rgba(255,199,94,0.8)]"
-                    />
-                  )}
-                  <AppIcon
-                    icon={app.icon}
-                    className={`w-6 h-6 shrink-0 stroke-[1.55] ${
+                  <button
+                    type="button"
+                    onClick={() => setSelectedId(app.id)}
+                    className={`hover-sheen relative w-full rounded-[14px] px-4 py-2.5 flex items-center gap-3.5 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC75E] ${
                       isSelected
-                        ? 'text-white drop-shadow-[0_0_10px_rgba(255,220,140,0.65)]'
-                        : 'text-[#E8F8FA] drop-shadow-[0_0_6px_rgba(128,245,245,0.3)]'
+                        ? 'bg-gradient-to-r from-[#024F5D]/88 via-[#003E4E]/84 to-[#002D3A]/92 golden-glow-card ead-rim-glint-gold text-white scale-[1.015]'
+                        : 'ead-glass-card ead-rim-glint text-[#E2F3F6] hover:text-white'
                     }`}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="font-display font-semibold text-[14.5px] leading-snug tracking-[-0.01em] truncate">
-                      {app.title[lang]}
-                    </div>
-                    {sub && (
-                      <div className="text-[11px] text-[#B7DEE4]/80 truncate">
-                        {sub[lang]}
-                      </div>
+                  >
+                    {isSelected && (
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-px left-1/2 -translate-x-1/2 w-[72%] h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#FFE8A3] to-transparent shadow-[0_0_16px_3px_rgba(255,199,94,0.8)]"
+                      />
                     )}
-                  </div>
-                </button>
+                    <AppIcon
+                      icon={app.icon}
+                      className={`w-6 h-6 shrink-0 stroke-[1.55] ${
+                        isSelected
+                          ? 'text-white drop-shadow-[0_0_10px_rgba(255,220,140,0.65)]'
+                          : 'text-[#E8F8FA] drop-shadow-[0_0_6px_rgba(128,245,245,0.3)]'
+                      }`}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="font-display font-semibold text-[14.5px] leading-snug tracking-[-0.01em] truncate">
+                        {app.title[lang]}
+                      </div>
+                      {sub && (
+                        <div className="text-[11px] text-[#B7DEE4]/80 truncate">
+                          {sub[lang]}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                </motion.div>
               );
             })}
           </div>
 
           {/* CENTER COLUMN — Executive 3D Studio Laptop Hardware Mockup Showing Real Portal Screens */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center py-1">
-            <div className="relative w-full max-w-[570px] animate-float-gentle">
+          <motion.div
+            initial={{ opacity: 0, y: 42, scale: 0.93 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={VIEWPORT_ONCE}
+            transition={{ duration: 0.8, delay: 0.1, ease: EASE_EXEC }}
+            className="lg:col-span-5 flex flex-col items-center justify-center py-1"
+          >
+            <ParallaxLayer offsetY={16} className="w-full flex justify-center">
+              <div className="relative w-full max-w-[570px] animate-float-gentle">
               {/* LAPTOP DISPLAY LID (Ultra-Thin Dark Space-Titanium Unibody Bezel) */}
               <div className="relative z-10 mx-auto w-[84%] rounded-t-[16px] rounded-b-[3px] p-[2px] bg-gradient-to-b from-[#96DCE5]/85 via-[#3B8494]/70 to-[#143743] shadow-[0_24px_56px_rgba(0,10,16,0.78),0_0_32px_rgba(0,217,232,0.2)]">
                 {/* Inner Obsidian Glass Lid Frame */}
@@ -373,20 +344,25 @@ export const SmartApplications: React.FC<SmartApplicationsProps> = ({
               </div>
 
               {/* Compact Low-Profile Neon Platform Disc matching Laptop Perspective */}
-              <div className="relative z-0 w-[112%] -left-[6%] aspect-[6/1] -mt-[6.2%] pointer-events-none select-none flex items-center justify-center">
+              <div className="relative z-0 w-[112%] -left-[6%] h-[76px] sm:h-[86px] -mt-[25px] sm:-mt-[29px] pointer-events-none select-none">
                 <img
                   src="/images/Futuristic%20Teal%20Neon%20Platform.png"
                   alt=""
                   aria-hidden="true"
-                  className="w-full h-auto block shrink-0 drop-shadow-[0_14px_24px_rgba(0,217,232,0.22)]"
-                  style={{ transform: 'translateY(-2.5%) scaleY(0.38)' }}
+                  className="absolute left-0 w-full h-auto block drop-shadow-[0_14px_24px_rgba(0,217,232,0.22)]"
+                  style={{
+                    top: '50%',
+                    transformOrigin: '50% 52.5%',
+                    transform: 'translateY(-52.5%) scaleY(0.38)',
+                  }}
                 />
               </div>
-            </div>
-          </div>
+              </div>
+            </ParallaxLayer>
+          </motion.div>
 
           {/* RIGHT COLUMN — Clean Icon + Title, Summary, 3 Feature Cards, Golden CTA */}
-          <div className="lg:col-span-4 lg:pl-2">
+          <RevealItem direction="right" delay={0.18} distance={28} className="lg:col-span-4 lg:pl-2">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedApp.id}
@@ -434,7 +410,7 @@ export const SmartApplications: React.FC<SmartApplicationsProps> = ({
                 </a>
               </motion.div>
             </AnimatePresence>
-          </div>
+          </RevealItem>
         </div>
       </div>
     </section>

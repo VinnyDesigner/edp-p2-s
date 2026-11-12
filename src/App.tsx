@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import {
   ENVIRONMENTAL_THEMES,
@@ -14,6 +15,8 @@ import { EnvironmentalInsights } from './components/EnvironmentalInsights';
 import { AboutPlatform } from './components/AboutPlatform';
 import { MarineFooter } from './components/MarineFooter';
 import { MarineModals, MarineModalState } from './components/MarineModals';
+import { ScrollProgressBar, smoothScrollToTarget } from './components/ScrollMotion';
+import { AmbientBackdrop } from './components/AmbientBackdrop';
 
 const ROUTE_TO_SECTION: Record<string, { id: string; selector: string }> = {
   '/': { id: 'home', selector: '#top' },
@@ -31,6 +34,8 @@ function MarineHomepage() {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const skipRouteScrollRef = useRef(false);
+  const scrollSpyLockUntilRef = useRef(0);
 
   // Keep document direction synced with active language
   useEffect(() => {
@@ -38,15 +43,20 @@ function MarineHomepage() {
     document.documentElement.lang = lang === 'AR' ? 'ar' : 'en';
   }, [lang]);
 
-  // Handle deep-linked route navigation on mount or path change
+  // Handle deep-linked route navigation on mount or browser back/forward
   useEffect(() => {
     const mapped = ROUTE_TO_SECTION[location.pathname];
     if (!mapped) return;
     setActiveNav(mapped.id);
+    if (skipRouteScrollRef.current) {
+      skipRouteScrollRef.current = false;
+      return;
+    }
     if (location.pathname === '/') return;
     const timer = window.setTimeout(() => {
-      const target = document.querySelector(mapped.selector);
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const targetTarget = mapped.id === 'home' ? 0 : mapped.selector;
+      const durationMs = smoothScrollToTarget(targetTarget, { offset: 82 });
+      scrollSpyLockUntilRef.current = Date.now() + durationMs + 80;
     }, 80);
     return () => window.clearTimeout(timer);
   }, [location.pathname]);
@@ -62,6 +72,7 @@ function MarineHomepage() {
     ];
 
     const onScroll = () => {
+      if (Date.now() < scrollSpyLockUntilRef.current) return;
       if (window.scrollY < 260) {
         setActiveNav('home');
         return;
@@ -85,20 +96,17 @@ function MarineHomepage() {
   const handleNavigate = (id: string, path: string) => {
     setActiveNav(id);
     if (location.pathname !== path) {
+      skipRouteScrollRef.current = true;
       navigate(path);
     }
-    const targetSelector = ROUTE_TO_SECTION[path]?.selector ?? '#top';
-    const targetEl = document.querySelector(targetSelector);
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else if (path === '/') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    const target = id === 'home' ? 0 : ROUTE_TO_SECTION[path]?.selector ?? '#top';
+    const durationMs = smoothScrollToTarget(target, { offset: 82 });
+    scrollSpyLockUntilRef.current = Date.now() + durationMs + 100;
   };
 
   const handleSelectFooterTheme = (themeId: ThemeId) => {
     setActiveThemeId(themeId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollToTarget(0);
     const found = ENVIRONMENTAL_THEMES.find((t) => t.id === themeId);
     if (found) {
       setModal({ kind: 'theme', theme: found });
@@ -114,19 +122,15 @@ function MarineHomepage() {
   };
 
   return (
-    <div
-      dir={lang === 'AR' ? 'rtl' : 'ltr'}
-      className="min-h-screen bg-[#002C3A] text-white flex flex-col selection:bg-[#00D9E8]/30 overflow-x-clip relative"
-    >
-      {/* Subtle Underwater Atmospheric Depth Glows */}
+    <MotionConfig reducedMotion="user">
       <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          background:
-            'radial-gradient(circle at 18% 35%, rgba(0,217,232,0.08) 0%, transparent 45%), radial-gradient(circle at 82% 62%, rgba(39,201,208,0.09) 0%, transparent 48%), radial-gradient(circle at 50% 90%, rgba(0,76,89,0.28) 0%, transparent 55%)',
-        }}
-      />
+        dir={lang === 'AR' ? 'rtl' : 'ltr'}
+        className="min-h-screen bg-[#00232E] text-white flex flex-col selection:bg-[#00D9E8]/30 overflow-x-clip relative"
+      >
+        <ScrollProgressBar />
+
+        {/* Atmospheric Oceanic & Cyber-Telemetry Background Canvas */}
+        <AmbientBackdrop />
 
       <Header
         lang={lang}
@@ -184,14 +188,15 @@ function MarineHomepage() {
         onOpenSupportInfo={(topic) => setModal({ kind: 'support', topic })}
       />
 
-      <MarineModals
-        lang={lang}
-        modal={modal}
-        onClose={() => setModal({ kind: 'none' })}
-        onChangeModal={setModal}
-        onActivateTheme={setActiveThemeId}
-      />
-    </div>
+        <MarineModals
+          lang={lang}
+          modal={modal}
+          onClose={() => setModal({ kind: 'none' })}
+          onChangeModal={setModal}
+          onActivateTheme={setActiveThemeId}
+        />
+      </div>
+    </MotionConfig>
   );
 }
 

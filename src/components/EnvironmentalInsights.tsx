@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Database, Layers, LayoutGrid, Leaf } from 'lucide-react';
 import { INSIGHT_STATS, InsightStat, Language } from '../data/marinePlatformData';
+import { EASE_EXEC, RevealItem } from './ScrollMotion';
 
 interface EnvironmentalInsightsProps {
   lang: Language;
@@ -62,7 +63,7 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
   onSelectStat,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
+  const inView = useInView(ref, { once: true, amount: 0.25 });
 
   return (
     <section
@@ -70,42 +71,11 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
       aria-label="Environmental Insights at a Glance"
       className="relative z-20 w-full py-6 sm:py-9 overflow-hidden"
     >
-      {/* Subtle Dotted Cyber-Oceanic Energy Waves behind Glance Banner */}
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 1440 240"
-        className="pointer-events-none absolute inset-0 w-full h-full opacity-45"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <linearGradient id="glanceBgWave" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#00D9E8" stopOpacity="0.05" />
-            <stop offset="35%" stopColor="#80F5F5" stopOpacity="0.55" />
-            <stop offset="72%" stopColor="#00D9E8" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#80F5F5" stopOpacity="0.05" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M-40 190 C 260 120, 520 225, 880 145 C 1150 85, 1320 45, 1480 25"
-          stroke="url(#glanceBgWave)"
-          strokeWidth="1.3"
-          fill="none"
-        />
-        <path
-          d="M-30 212 C 300 150, 580 238, 940 168 C 1180 120, 1330 95, 1480 155"
-          stroke="url(#glanceBgWave)"
-          strokeWidth="1"
-          strokeDasharray="1.5 5"
-          fill="none"
-          opacity="0.7"
-        />
-      </svg>
-
       <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 34, scale: 0.97 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.7, ease: EASE_EXEC }}
           className="relative rounded-[26px] border border-[#27C9D0]/30 bg-[#002835]/70 backdrop-blur-xl shadow-[0_0_24px_rgba(0,217,232,0.08)] overflow-hidden"
         >
           {/* Left S-Curved Luminous Backdrop Panel with Gold Border Accent (Desktop) */}
@@ -131,11 +101,14 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
               d="M 0,0 L 388,0 C 350,26 376,120 315,180 L 0,180 Z"
               fill="url(#glanceCurveFill)"
             />
-            <path
+            <motion.path
               d="M 388,0 C 350,26 376,120 315,180"
               fill="none"
               stroke="url(#glanceCurveEdge)"
               strokeWidth="1.6"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={inView ? { pathLength: 1, opacity: 1 } : {}}
+              transition={{ duration: 0.95, delay: 0.18, ease: EASE_EXEC }}
             />
           </svg>
 
@@ -155,7 +128,7 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
 
           <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-5 xl:gap-8 p-5 sm:p-6 xl:py-5 xl:px-7">
             {/* Left Editorial Telemetry Heading */}
-            <div className="shrink-0 xl:w-[325px]">
+            <RevealItem direction="left" delay={0.1} distance={24} className="shrink-0 xl:w-[325px]">
               <div className="flex items-center gap-2.5">
                 <span
                   aria-hidden="true"
@@ -164,9 +137,12 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
                 <span className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#9CECF0]">
                   {lang === 'EN' ? 'LIVE EMIRATE TELEMETRY' : 'مؤشرات الإمارة المباشرة'}
                 </span>
-                <span
+                <motion.span
                   aria-hidden="true"
-                  className="w-14 h-[1.5px] bg-gradient-to-r from-[#FFC75E] to-transparent"
+                  initial={{ scaleX: 0 }}
+                  animate={inView ? { scaleX: 1 } : {}}
+                  transition={{ duration: 0.7, delay: 0.25, ease: EASE_EXEC }}
+                  className="origin-left rtl:origin-right w-14 h-[1.5px] bg-gradient-to-r from-[#FFC75E] to-transparent"
                 />
               </div>
               <h2 className="mt-2.5 font-display font-extrabold text-[22px] sm:text-[26px] tracking-[-0.02em] text-white leading-[1.15]">
@@ -180,12 +156,18 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
                   'لمحة عن المؤشرات البيئية'
                 )}
               </h2>
-            </div>
+            </RevealItem>
 
             {/* Right 4 Square-Rounded KPI Glass Sub-Cards with Vertical Dividers */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-5 flex-1">
               {INSIGHT_STATS.map((stat, idx) => (
-                <div key={stat.id} className="relative flex items-stretch">
+                <motion.div
+                  key={stat.id}
+                  initial={{ opacity: 0, y: 24, scale: 0.94 }}
+                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                  transition={{ duration: 0.55, delay: 0.14 + idx * 0.08, ease: EASE_EXEC }}
+                  className="relative flex items-stretch"
+                >
                   <button
                     type="button"
                     onClick={() => onSelectStat(stat.id)}
@@ -217,7 +199,7 @@ export const EnvironmentalInsights: React.FC<EnvironmentalInsightsProps> = ({
                       className="hidden md:block pointer-events-none absolute -right-[9px] sm:-right-[11px] rtl:right-auto rtl:-left-[9px] rtl:sm:-left-[11px] top-1/2 -translate-y-1/2 w-[1px] h-16 bg-gradient-to-b from-transparent via-[#80F5F5]/20 to-transparent"
                     />
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

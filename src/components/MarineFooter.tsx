@@ -1,6 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Instagram, Linkedin, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 import { ENVIRONMENTAL_THEMES, Language, NAV_LINKS, ThemeId } from '../data/marinePlatformData';
+import { EASE_EXEC, RevealItem, VIEWPORT_ONCE, smoothScrollToTarget } from './ScrollMotion';
 
 interface MarineFooterProps {
   lang: Language;
@@ -41,12 +43,16 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
   return (
     <footer
       id="contact"
-      className="relative w-full mt-8 pt-12 pb-6 overflow-hidden bg-gradient-to-b from-[#002836] via-[#00212D] to-[#001720] border-t border-[#27C9D0]/20"
+      className="relative w-full mt-8 pt-12 pb-6 overflow-hidden bg-gradient-to-b from-[#00222E]/65 via-[#001B25]/85 to-[#00131B]/95 backdrop-blur-md border-t border-[#27C9D0]/20"
     >
       {/* Subtle Illuminated Abu Dhabi Skyline Silhouette on the Right */}
-      <svg
+      <motion.svg
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 0.55, y: 0 }}
+        viewport={VIEWPORT_ONCE}
+        transition={{ duration: 0.9, delay: 0.15, ease: EASE_EXEC }}
         viewBox="0 0 420 120"
-        className="pointer-events-none absolute right-4 sm:right-12 bottom-14 w-[280px] sm:w-[390px] h-auto opacity-55"
+        className="pointer-events-none absolute right-4 sm:right-12 bottom-14 w-[280px] sm:w-[390px] h-auto"
         fill="none"
         aria-hidden="true"
       >
@@ -62,13 +68,13 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
           <path d="M208 108 V46 H228 V108 M238 108 V68 Q254 44 270 68 V108 M282 108 V76 H298 V108" />
           <path d="M310 108 V40 L320 26 L330 40 V108 M340 108 V58 H362 V108 M372 108 V74 H396 V108" />
         </g>
-      </svg>
+      </motion.svg>
 
       {/* Main 5 Columns */}
       <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6">
           {/* Column 1 — EAD Logo, Description & Social Icons */}
-          <div className="lg:col-span-4 lg:pr-6 lg:border-r lg:border-[#80F5F5]/15">
+          <RevealItem delay={0.04} distance={22} className="lg:col-span-4 lg:pr-6 lg:border-r lg:border-[#80F5F5]/15">
             <div className="flex items-center">
               <img
                 src="/images/ead-logo-white.png"
@@ -96,10 +102,10 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                 </button>
               ))}
             </div>
-          </div>
+          </RevealItem>
 
           {/* Column 2 — Explore */}
-          <div className="lg:col-span-2">
+          <RevealItem delay={0.1} distance={22} className="lg:col-span-2">
             <h3 className="font-display font-bold text-[14px] text-white mb-3.5">
               {lang === 'EN' ? 'Explore' : 'استكشف'}
             </h3>
@@ -119,10 +125,10 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </RevealItem>
 
           {/* Column 3 — Data Themes */}
-          <div className="lg:col-span-2">
+          <RevealItem delay={0.16} distance={22} className="lg:col-span-2">
             <h3 className="font-display font-bold text-[14px] text-white mb-3.5">
               {lang === 'EN' ? 'Data Themes' : 'المواضيع البيئية'}
             </h3>
@@ -133,7 +139,7 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                     type="button"
                     onClick={() => {
                       onSelectTheme(theme.id);
-                      document.getElementById('top')?.scrollIntoView({ behavior: 'smooth' });
+                      smoothScrollToTarget(0);
                     }}
                     className="hover:text-[#00D9E8] transition-colors"
                   >
@@ -142,10 +148,10 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </RevealItem>
 
           {/* Column 4 — Support */}
-          <div className="lg:col-span-2">
+          <RevealItem delay={0.22} distance={22} className="lg:col-span-2">
             <h3 className="font-display font-bold text-[14px] text-white mb-3.5">
               {lang === 'EN' ? 'Support' : 'الدعم'}
             </h3>
@@ -162,10 +168,10 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </RevealItem>
 
           {/* Column 5 — Contact Us */}
-          <div className="lg:col-span-2">
+          <RevealItem delay={0.28} distance={22} className="lg:col-span-2">
             <h3 className="font-display font-bold text-[14px] text-white mb-3.5">
               {lang === 'EN' ? 'Contact Us' : 'اتصل بنا'}
             </h3>
@@ -191,40 +197,12 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                 </span>
               </li>
             </ul>
-          </div>
+          </RevealItem>
         </div>
       </div>
 
-      {/* Animated Cyan Wave along Bottom */}
-      <div className="relative w-full h-14 mt-6 pointer-events-none select-none overflow-hidden">
-        <svg viewBox="0 0 1440 60" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="footerCyanWave" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#00D9E8" stopOpacity="0.1" />
-              <stop offset="35%" stopColor="#00D9E8" stopOpacity="0.8" />
-              <stop offset="68%" stopColor="#FFC75E" stopOpacity="0.65" />
-              <stop offset="100%" stopColor="#80F5F5" stopOpacity="0.85" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M0 34 C 280 6, 560 54, 880 28 C 1140 8, 1300 44, 1440 24"
-            stroke="url(#footerCyanWave)"
-            strokeWidth="2.2"
-            fill="none"
-            className="animate-wave-scroll"
-          />
-          <path
-            d="M0 44 C 340 56, 680 18, 1020 42 C 1240 56, 1360 32, 1440 40"
-            stroke="#27C9D0"
-            strokeOpacity="0.45"
-            strokeWidth="1.4"
-            fill="none"
-          />
-        </svg>
-      </div>
-
       {/* Bottom Copyright & Utilities */}
-      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 border-t border-[#80F5F5]/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-[#C6E4E8]/85">
+      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-4 border-t border-[#80F5F5]/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-[#C6E4E8]/85">
         <p>
           {lang === 'EN'
             ? '© 2026 Environment Agency – Abu Dhabi. All rights reserved.'

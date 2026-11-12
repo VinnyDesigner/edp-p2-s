@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Language } from '../data/marinePlatformData';
+import { EASE_EXEC, ParallaxLayer, RevealItem, VIEWPORT_ONCE } from './ScrollMotion';
 
 interface AboutPlatformProps {
   lang: Language;
@@ -15,19 +16,25 @@ export const AboutPlatform: React.FC<AboutPlatformProps> = ({ lang, onLearnMore 
       className="relative z-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10"
     >
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.25 }}
-        transition={{ duration: 0.65 }}
+        initial={{ opacity: 0, y: 34, scale: 0.97 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={VIEWPORT_ONCE}
+        transition={{ duration: 0.75, ease: EASE_EXEC }}
         className="relative rounded-[24px] sm:rounded-[28px] overflow-hidden ead-glass-card ead-rim-glint border border-[#80F5F5]/45 shadow-[0_24px_60px_rgba(0,16,22,0.84),0_0_32px_rgba(0,217,232,0.2)]"
       >
-        {/* Integrated Panoramic Photographic Background: Mangroves left, Skyline & Sunset right */}
-        <img
-          src="/images/about-panoramic-banner.jpg"
-          alt="Abu Dhabi coastal mangroves and sunset skyline with Sheikh Zayed Grand Mosque"
-          loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+        {/* Integrated Panoramic Photographic Background with Scroll Parallax: Mangroves left, Skyline & Sunset right */}
+        <ParallaxLayer
+          offsetY={20}
+          scaleRange={[1.09, 1.0]}
+          className="absolute inset-0 overflow-hidden pointer-events-none"
+        >
+          <img
+            src="/images/about-panoramic-banner.jpg"
+            alt="Abu Dhabi coastal mangroves and sunset skyline with Sheikh Zayed Grand Mosque"
+            loading="lazy"
+            className="w-full h-full object-cover object-center"
+          />
+        </ParallaxLayer>
 
         {/* Smooth Directional Ocean-Teal Scrim preserving Left Mangroves & Clear Right Skyline */}
         <div
@@ -48,7 +55,7 @@ export const AboutPlatform: React.FC<AboutPlatformProps> = ({ lang, onLearnMore 
         {/* Balanced 12-Col Banner Content: Heading (4) | Divider + Copy & CTA (5) | Skyline Showcase (3) */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center gap-6 lg:gap-8 px-6 sm:px-10 lg:px-12 py-8 sm:py-10">
           {/* Left Heading Column — flush with site grid margin */}
-          <div className="lg:col-span-4">
+          <RevealItem direction="left" delay={0.14} distance={24} className="lg:col-span-4">
             <div className="flex items-center gap-2.5">
               <span
                 aria-hidden="true"
@@ -73,10 +80,15 @@ export const AboutPlatform: React.FC<AboutPlatformProps> = ({ lang, onLearnMore 
                 </>
               )}
             </h2>
-          </div>
+          </RevealItem>
 
           {/* Center Description + Learn More CTA with Clean Vertical Divider */}
-          <div className="lg:col-span-5 lg:border-l lg:border-[#80F5F5]/22 lg:pl-8 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-8">
+          <RevealItem
+            direction="right"
+            delay={0.22}
+            distance={24}
+            className="lg:col-span-5 lg:border-l lg:border-[#80F5F5]/22 lg:pl-8 rtl:lg:border-l-0 rtl:lg:border-r rtl:lg:pl-0 rtl:lg:pr-8"
+          >
             <p className="text-[13.5px] sm:text-[14.5px] leading-[1.6] text-[#D8EFF3] max-w-[470px]">
               {lang === 'EN'
                 ? "The Environmental Data Platform (EDP) is EAD's central platform for environmental data discovery, access and intelligence, enabling evidence-based decision-making for a healthier and more sustainable Abu Dhabi."
@@ -91,7 +103,7 @@ export const AboutPlatform: React.FC<AboutPlatformProps> = ({ lang, onLearnMore 
               <span>{lang === 'EN' ? 'Learn More' : 'اعرف المزيد'}</span>
               <ArrowRight className="w-4 h-4 stroke-[2.3] transition-transform group-hover:translate-x-1 rtl:rotate-180" />
             </button>
-          </div>
+          </RevealItem>
 
           {/* Right Mosque & Sunset Skyline Visual Window */}
           <div className="hidden lg:block lg:col-span-3 min-h-[124px]" aria-hidden="true" />

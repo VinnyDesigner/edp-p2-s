@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { EASE_EXEC } from './ScrollMotion';
 import {
   ArrowRight,
   ChevronLeft,
@@ -65,8 +66,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreTheme,
   onWatchOverview,
 }) => {
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroBgY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const heroBgScale = useTransform(scrollYProgress, [0, 1], [1, 1.07]);
+  const heroContentY = useTransform(scrollYProgress, [0, 1], [0, 32]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [visibleCount, setVisibleCount] = useState<number>(() => {
     if (typeof window === 'undefined') return 6;
@@ -104,6 +115,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       return Math.max(0, Math.min(next, clampedMax));
     });
   }, [activeIndex, visibleCount]);
+
+  // Auto-cycle through environmental themes smoothly when not hovered or searching; clicking resets timer
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+    if (isCarouselHovered || searchFocused || searchQuery.trim().length > 0) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      const nextIdx = activeIndex >= ENVIRONMENTAL_THEMES.length - 1 ? 0 : activeIndex + 1;
+      onSelectTheme(ENVIRONMENTAL_THEMES[nextIdx].id);
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [activeIndex, isCarouselHovered, searchFocused, searchQuery, onSelectTheme]);
 
   const visibleThemes = useMemo(
     () => ENVIRONMENTAL_THEMES.slice(windowStart, windowStart + visibleCount),
@@ -167,32 +196,38 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section
       id="top"
+      ref={heroRef}
       onMouseMove={handleMouseMove}
       className="relative w-full min-h-[670px] sm:min-h-[710px] lg:min-h-[740px] flex flex-col justify-between overflow-hidden pt-[88px] pb-8"
     >
-      {/* Full-width Cinematic Photorealistic Background with Smooth Theme Transition */}
+      {/* Full-width Cinematic Photorealistic Background with Scroll Parallax & Smooth Theme Transition */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-[#002C3A]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTheme.id}
-            initial={{ opacity: 0.45, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0.45 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0"
-            style={{
-              transform: `translate3d(${mousePos.x * -0.45}px, ${mousePos.y * -0.35}px, 0)`,
-            }}
-          >
-            <img
-              src={activeTheme.heroImage}
-              alt={activeTheme.imageAlt}
-              loading="eager"
-              decoding="async"
-              className="w-full h-full object-cover object-center animate-hero-zoom contrast-[1.04] saturate-[1.06]"
-            />
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          style={{ y: heroBgY, scale: heroBgScale }}
+          className="absolute inset-0 will-change-transform"
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTheme.id}
+              initial={{ opacity: 0.45, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0.45 }}
+              transition={{ duration: 0.65, ease: EASE_EXEC }}
+              className="absolute inset-0"
+              style={{
+                transform: `translate3d(${mousePos.x * -0.45}px, ${mousePos.y * -0.35}px, 0)`,
+              }}
+            >
+              <img
+                src={activeTheme.heroImage}
+                alt={activeTheme.imageAlt}
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover object-center animate-hero-zoom contrast-[1.04] saturate-[1.06]"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
 
         {/* Subtle Underwater Sunlight Rays (Marine/Groundwater/Fisheries atmosphere without hazing the skyline or reef) */}
         {(activeTheme.id === 'marine-water-quality' ||
@@ -231,7 +266,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         />
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-20 sm:h-24 bg-gradient-to-t from-[#002C3A] via-[#002C3A]/45 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-24 sm:h-28 bg-gradient-to-t from-[#002734] via-[#002734]/50 to-transparent"
         />
         <div
           aria-hidden="true"
@@ -240,7 +275,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Upper-Left Hero Content */}
-      <div className="relative z-20 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12">
+      <motion.div
+        style={{ y: heroContentY }}
+        className="relative z-20 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12 will-change-transform"
+      >
         <div className="max-w-[820px]">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -358,10 +396,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Bottom Interactive Environmental Theme Carousel */}
-      <div className="relative z-20 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.22, ease: EASE_EXEC }}
+        onMouseEnter={() => setIsCarouselHovered(true)}
+        onMouseLeave={() => setIsCarouselHovered(false)}
+        className="relative z-20 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-12"
+      >
         <div className="relative flex items-center gap-2 sm:gap-4">
           {/* Previous Arrow */}
           <button
@@ -467,16 +512,29 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 type="button"
                 onClick={() => onSelectTheme(t.id)}
                 aria-label={`Select ${t.title[lang]} theme`}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
+                className={`relative overflow-hidden h-1.5 rounded-full transition-all duration-300 ${
                   active
-                    ? 'w-8 bg-[#FFC75E] shadow-[0_0_10px_rgba(255,199,94,0.8)]'
+                    ? 'w-9 bg-[#FFC75E]/30 shadow-[0_0_10px_rgba(255,199,94,0.65)]'
                     : 'w-4 bg-[#80F5F5]/30 hover:bg-[#80F5F5]/60'
                 }`}
-              />
+              >
+                {active && (
+                  <motion.span
+                    key={`${t.id}-${isCarouselHovered ? 'paused' : 'play'}`}
+                    initial={{ scaleX: isCarouselHovered ? 1 : 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{
+                      duration: isCarouselHovered ? 0.2 : 4.5,
+                      ease: 'linear',
+                    }}
+                    className="absolute inset-0 origin-left rtl:origin-right rounded-full bg-[#FFC75E]"
+                  />
+                )}
+              </button>
             );
           })}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
