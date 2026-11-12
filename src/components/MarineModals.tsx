@@ -284,7 +284,7 @@ export const MarineModals: React.FC<MarineModalsProps> = ({
               type="button"
               onClick={onClose}
               aria-label={lang === 'EN' ? 'Close modal' : 'إغلاق'}
-              className="sticky top-4 float-right mr-4 mt-4 z-20 w-9 h-9 rounded-full bg-[#002C3A]/85 border border-[#80F5F5]/35 text-white hover:border-[#FFC75E] hover:text-[#FFC75E] flex items-center justify-center transition-colors"
+              className="sticky top-4 float-right mr-4 mt-4 z-20 w-9 h-9 rounded-full bg-[#FFC75E]/20 border border-[#FFC75E]/65 text-[#FFE8AD] hover:bg-[#FFC75E] hover:text-[#002C3A] flex items-center justify-center transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -477,16 +477,27 @@ export const MarineModals: React.FC<MarineModalsProps> = ({
                         {modal.theme.title[lang]}
                       </h3>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onActivateTheme(modal.theme.id);
-                        onClose();
-                      }}
-                      className="px-4 py-2 rounded-full bg-[#00D9E8]/20 border border-[#00D9E8] text-[#80F5F5] hover:bg-[#00D9E8] hover:text-[#00222E] text-[12.5px] font-bold transition-all"
-                    >
-                      {lang === 'EN' ? 'Highlight on Homepage' : 'تفعيل على الرئيسية'}
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <a
+                        href={modal.theme.portalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="golden-pill-btn px-4 py-2 rounded-full text-[12.5px] font-bold inline-flex items-center gap-1.5 transition-transform hover:scale-[1.03]"
+                      >
+                        <span>{lang === 'EN' ? 'Open Portal' : 'فتح البوابة'}</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onActivateTheme(modal.theme.id);
+                          onClose();
+                        }}
+                        className="golden-pill-btn px-4 py-2 rounded-full text-[12.5px] font-bold transition-transform hover:scale-[1.03]"
+                      >
+                        {lang === 'EN' ? 'Highlight on Homepage' : 'تفعيل على الرئيسية'}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -904,7 +915,7 @@ export const MarineModals: React.FC<MarineModalsProps> = ({
                 <button
                   type="button"
                   onClick={() => setLoginSubmitted(true)}
-                  className="mt-5 w-full py-3 rounded-full bg-white text-[#002C3A] font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-[#80F5F5] transition-colors"
+                  className="golden-pill-btn mt-5 w-full py-3 rounded-full font-bold text-[14px] flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
                 >
                   <UserCheck className="w-4 h-4" />
                   <span>{lang === 'EN' ? 'Continue with UAE PASS' : 'المتابعة بالهوية الرقمية'}</span>

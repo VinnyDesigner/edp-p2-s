@@ -255,10 +255,10 @@ export const SmartApplications: React.FC<SmartApplicationsProps> = ({
                                 ? 'Toggle live embedded portal view'
                                 : 'تبديل العرض التفاعلي المباشر'
                             }
-                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-semibold border transition-colors ${
+                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-bold border transition-colors ${
                               liveIframeActive
-                                ? 'bg-[#00D9E8]/25 border-[#00D9E8] text-white'
-                                : 'bg-[#021A24] border-[#80F5F5]/20 text-[#9CECF0] hover:text-white'
+                                ? 'bg-[#FFC75E] border-[#FFE399] text-[#002C3A]'
+                                : 'bg-[#FFC75E]/20 border-[#FFC75E]/60 text-[#FFE8AD] hover:bg-[#FFC75E] hover:text-[#002C3A]'
                             }`}
                           >
                             <Monitor className="w-2.5 h-2.5" />
@@ -304,7 +304,7 @@ export const SmartApplications: React.FC<SmartApplicationsProps> = ({
                             href={selectedApp.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="absolute bottom-2 right-2 z-20 inline-flex items-center gap-1 rounded-full bg-[#002835]/85 backdrop-blur-md border border-[#80F5F5]/30 hover:border-[#FFC75E] px-2.5 py-1 text-[9px] font-semibold text-white hover:text-[#FFC75E] transition-all"
+                            className="golden-pill-btn absolute bottom-2 right-2 z-20 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-bold transition-transform hover:scale-[1.03]"
                           >
                             <span>{lang === 'EN' ? 'Open Portal' : 'فتح البوابة'}</span>
                             <ExternalLink className="w-2.5 h-2.5" />

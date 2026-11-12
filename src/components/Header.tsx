@@ -77,16 +77,16 @@ export const Header: React.FC<HeaderProps> = ({
                   key={item.id}
                   href={item.path}
                   onClick={(e) => handleClick(e, item.id, item.path)}
-                  className={`relative px-4 py-1.5 rounded-full text-[13.5px] font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D9E8] ${
+                  className={`relative px-4 py-1.5 rounded-full text-[13.5px] font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC75E] ${
                     isActive
                       ? 'text-[#002C3A] font-semibold'
-                      : 'text-[#C6E4E8] hover:text-white hover:bg-white/10'
+                      : 'text-[#C6E4E8] hover:text-[#FFE399] hover:bg-[#FFC75E]/15'
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="header-active-pill"
-                      className="absolute inset-0 rounded-full bg-gradient-to-r from-[#80F5F5] to-[#27C9D0] shadow-[0_0_16px_rgba(0,217,232,0.55)] -z-10"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-[#FFE399] via-[#FFC75E] to-[#E6A83C] shadow-[0_0_18px_rgba(255,199,94,0.55)] -z-10"
                       transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                     />
                   )}
@@ -100,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => onToggleLang(lang === 'EN' ? 'AR' : 'EN')}
-            className="font-arabic rounded-full px-3 py-1.5 text-[13.5px] font-medium text-[#C6E4E8] hover:text-[#80F5F5] hover:bg-white/10 transition-all"
+            className="font-arabic text-[13.5px] font-medium text-[#C6E4E8] hover:text-[#FFC75E] transition-colors"
           >
             {lang === 'EN' ? 'عربي' : 'English'}
           </button>
@@ -109,9 +109,9 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={onOpenLogin}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-white bg-[#004454]/50 backdrop-blur-lg hover:bg-[#005868]/65 hover:shadow-[0_0_20px_rgba(0,217,232,0.35)] transition-all"
+            className="golden-pill-btn inline-flex items-center gap-2 rounded-full px-5 py-1.5 text-[13px] font-bold transition-transform hover:scale-[1.03]"
           >
-            <User className="w-3.5 h-3.5 text-[#80F5F5]" />
+            <User className="w-3.5 h-3.5 text-[#002C3A]" />
             <span>{lang === 'EN' ? 'Log In' : 'تسجيل الدخول'}</span>
           </button>
         </div>
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           onClick={() => setMobileOpen((p) => !p)}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          className="lg:hidden w-10 h-10 rounded-full bg-[#004454]/50 backdrop-blur-lg flex items-center justify-center text-white hover:bg-[#005868]/65 transition-colors"
+          className="lg:hidden w-10 h-10 rounded-full golden-pill-btn flex items-center justify-center transition-transform hover:scale-[1.04]"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -147,8 +147,8 @@ export const Header: React.FC<HeaderProps> = ({
                     onClick={(e) => handleClick(e, item.id, item.path)}
                     className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-gradient-to-r from-[#80F5F5] to-[#27C9D0] text-[#002C3A] font-bold'
-                        : 'text-[#C6E4E8] hover:bg-white/10 hover:text-white'
+                        ? 'bg-gradient-to-r from-[#FFE399] via-[#FFC75E] to-[#E6A83C] text-[#002C3A] font-bold shadow-[0_0_14px_rgba(255,199,94,0.45)]'
+                        : 'text-[#C6E4E8] hover:bg-[#FFC75E]/15 hover:text-[#FFE399]'
                     }`}
                   >
                     {item.label[lang]}
@@ -156,11 +156,11 @@ export const Header: React.FC<HeaderProps> = ({
                 );
               })}
 
-              <div className="pt-3 mt-2 border-t border-[#27C9D0]/20 flex items-center justify-between gap-3">
+              <div className="pt-3 mt-2 border-t border-[#FFC75E]/20 flex items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={() => onToggleLang(lang === 'EN' ? 'AR' : 'EN')}
-                  className="font-arabic rounded-full ocean-glass px-4 py-1.5 text-xs font-semibold text-[#C6E4E8] hover:text-white transition-colors"
+                  className="font-arabic px-2 py-1.5 text-xs font-semibold text-[#C6E4E8] hover:text-[#FFC75E] transition-colors"
                 >
                   {lang === 'EN' ? 'عربي' : 'English'}
                 </button>
@@ -171,9 +171,9 @@ export const Header: React.FC<HeaderProps> = ({
                     setMobileOpen(false);
                     onOpenLogin();
                   }}
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-white ocean-glass"
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold golden-pill-btn"
                 >
-                  <User className="w-3.5 h-3.5 text-[#80F5F5]" />
+                  <User className="w-3.5 h-3.5 text-[#002C3A]" />
                   <span>{lang === 'EN' ? 'Log In' : 'تسجيل الدخول'}</span>
                 </button>
               </div>

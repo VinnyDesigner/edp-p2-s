@@ -147,7 +147,6 @@ function MarineHomepage() {
           activeThemeId={activeThemeId}
           onSelectTheme={setActiveThemeId}
           onOpenSearchModal={(query) => setModal({ kind: 'search', query })}
-          onExploreTheme={(theme) => setModal({ kind: 'theme', theme })}
           onWatchOverview={() => setModal({ kind: 'overview' })}
         />
 

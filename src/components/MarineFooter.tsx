@@ -134,7 +134,7 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
                   type="button"
                   aria-label={soc.name}
                   onClick={() => onOpenSupportInfo(soc.name)}
-                  className="w-8 h-8 rounded-lg ocean-glass flex items-center justify-center text-[#C6E4E8] hover:text-white hover:border-[#00D9E8] transition-colors"
+                  className="w-8 h-8 rounded-lg bg-[#FFC75E]/18 border border-[#FFC75E]/55 flex items-center justify-center text-[#FFC75E] hover:bg-[#FFC75E] hover:text-[#002C3A] transition-colors"
                 >
                   {soc.icon}
                 </button>

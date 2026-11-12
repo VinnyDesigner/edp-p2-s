@@ -223,10 +223,10 @@ export const SectionHeaderReveal: React.FC<SectionHeaderRevealProps> = ({
           whileInView={{ opacity: 1, x: 0 }}
           viewport={VIEWPORT_ONCE}
           transition={{ duration: 0.55, delay: 0.18, ease: EASE_EXEC }}
-          className="group inline-flex items-center gap-2 text-[13.5px] font-semibold text-white hover:text-[#FFC75E] transition-colors self-start sm:self-auto"
+          className="golden-pill-btn group inline-flex items-center gap-2 rounded-full px-5 py-2 text-[12.5px] sm:text-[13px] font-bold transition-transform hover:scale-[1.03] self-start sm:self-auto"
         >
           <span>{actionLabel}</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
+          <ArrowRight className="w-4 h-4 stroke-[2.3] transition-transform group-hover:translate-x-1 rtl:rotate-180" />
         </motion.button>
       )}
     </div>

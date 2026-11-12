@@ -30,7 +30,6 @@ interface HeroSectionProps {
   activeThemeId: ThemeId;
   onSelectTheme: (id: ThemeId) => void;
   onOpenSearchModal: (query: string) => void;
-  onExploreTheme: (theme: EnvironmentalTheme) => void;
   onWatchOverview: () => void;
 }
 
@@ -63,7 +62,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   activeThemeId,
   onSelectTheme,
   onOpenSearchModal,
-  onExploreTheme,
   onWatchOverview,
 }) => {
   const heroRef = useRef<HTMLElement>(null);
@@ -167,7 +165,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           sub: `${t.datasetsCount} • Theme`,
           action: () => {
             onSelectTheme(t.id);
-            onExploreTheme(t);
+            setSearchFocused(false);
+            window.open(t.portalUrl, '_blank', 'noopener,noreferrer');
           },
         });
       }
@@ -191,7 +190,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       }
     });
     return results.slice(0, 5);
-  }, [searchQuery, lang, onSelectTheme, onExploreTheme, onOpenSearchModal]);
+  }, [searchQuery, lang, onSelectTheme, onOpenSearchModal]);
 
   return (
     <section
@@ -377,22 +376,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* Primary & Secondary CTAs */}
           <div className="mt-5 flex flex-wrap items-center gap-3.5">
-            <button
-              type="button"
-              onClick={() => onExploreTheme(activeTheme)}
+            <a
+              href={activeTheme.portalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="golden-pill-btn group inline-flex items-center gap-2.5 rounded-full px-6 py-2.5 text-[13.5px] sm:text-[14px] font-bold transition-all duration-200 hover:scale-[1.02]"
             >
               <span>{activeTheme.ctaLabel[lang]}</span>
               <ArrowRight className="w-4 h-4 stroke-[2.3] transition-transform duration-200 group-hover:translate-x-1 rtl:rotate-180" />
-            </button>
+            </a>
 
             <button
               type="button"
               onClick={onWatchOverview}
-              className="group inline-flex items-center gap-2.5 rounded-full px-5 sm:px-6 py-2.5 text-[13.5px] sm:text-[14px] font-semibold text-white bg-[#002C3A]/65 backdrop-blur-md border border-[#80F5F5]/45 hover:border-[#00D9E8] hover:bg-[#004C59]/80 hover:shadow-[0_0_20px_rgba(0,217,232,0.3)] transition-all duration-200"
+              className="group inline-flex items-center gap-2.5 rounded-full px-5 sm:px-6 py-2.5 text-[13.5px] sm:text-[14px] font-bold bg-[#FFC75E]/22 backdrop-blur-md border border-[#FFC75E]/75 text-[#FFE8AD] hover:bg-[#FFC75E] hover:text-[#002C3A] hover:shadow-[0_0_22px_rgba(255,199,94,0.5)] transition-all duration-200"
             >
               <span>{lang === 'EN' ? 'Watch Overview' : 'شاهد النظرة العامة'}</span>
-              <Play className="w-3.5 h-3.5 text-[#80F5F5] group-hover:text-white transition-colors" />
+              <Play className="w-3.5 h-3.5 text-[#FFC75E] group-hover:text-[#002C3A] fill-current transition-colors" />
             </button>
           </div>
         </div>
@@ -413,7 +413,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             type="button"
             onClick={handlePrevTheme}
             aria-label="Previous environmental theme"
-            className="shrink-0 w-9 h-9 rounded-full ocean-glass flex items-center justify-center text-[#C6E4E8] hover:text-white hover:border-[#00D9E8] transition-all"
+            className="shrink-0 w-9 h-9 rounded-full bg-[#FFC75E]/20 backdrop-blur-md border border-[#FFC75E]/60 flex items-center justify-center text-[#FFC75E] hover:bg-[#FFC75E] hover:text-[#002C3A] hover:shadow-[0_0_16px_rgba(255,199,94,0.5)] transition-all"
           >
             <ChevronLeft className="w-4 h-4 rtl:rotate-180" />
           </button>
@@ -496,7 +496,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             type="button"
             onClick={handleNextTheme}
             aria-label="Next environmental theme"
-            className="shrink-0 w-9 h-9 rounded-full ocean-glass flex items-center justify-center text-[#C6E4E8] hover:text-white hover:border-[#00D9E8] transition-all"
+            className="shrink-0 w-9 h-9 rounded-full bg-[#FFC75E]/20 backdrop-blur-md border border-[#FFC75E]/60 flex items-center justify-center text-[#FFC75E] hover:bg-[#FFC75E] hover:text-[#002C3A] hover:shadow-[0_0_16px_rgba(255,199,94,0.5)] transition-all"
           >
             <ChevronRight className="w-4 h-4 rtl:rotate-180" />
           </button>
@@ -515,7 +515,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className={`relative overflow-hidden h-1.5 rounded-full transition-all duration-300 ${
                   active
                     ? 'w-9 bg-[#FFC75E]/30 shadow-[0_0_10px_rgba(255,199,94,0.65)]'
-                    : 'w-4 bg-[#80F5F5]/30 hover:bg-[#80F5F5]/60'
+                    : 'w-4 bg-[#FFC75E]/25 hover:bg-[#FFC75E]/55'
                 }`}
               >
                 {active && (

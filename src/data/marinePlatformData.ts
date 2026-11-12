@@ -12,6 +12,7 @@ export type ThemeId =
 
 export interface EnvironmentalTheme {
   id: ThemeId;
+  portalUrl: string;
   title: { EN: string; AR: string };
   heroHeading: { EN: string; AR: string };
   heroDescription: { EN: string; AR: string };
@@ -84,6 +85,7 @@ export const NAV_LINKS = [
 export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   {
     id: 'ecosystem',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/Biodiversity',
     title: { EN: 'Ecosystem', AR: 'النظام البيئي' },
     heroHeading: { EN: 'Ecosystem', AR: 'النظام البيئي' },
     heroDescription: {
@@ -99,6 +101,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'groundwater',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/GW',
     title: { EN: 'Groundwater', AR: 'المياه الجوفية' },
     heroHeading: { EN: 'Groundwater', AR: 'المياه الجوفية' },
     heroDescription: {
@@ -114,6 +117,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'soil',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/SOIL',
     title: { EN: 'Soil', AR: 'التربة' },
     heroHeading: { EN: 'Soil', AR: 'التربة' },
     heroDescription: {
@@ -129,6 +133,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'waste-management',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/WM',
     title: { EN: 'Waste Management', AR: 'إدارة النفايات' },
     heroHeading: { EN: 'Waste Management', AR: 'إدارة النفايات' },
     heroDescription: {
@@ -144,6 +149,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'air-quality',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/AQ',
     title: { EN: 'Air Quality', AR: 'جودة الهواء' },
     heroHeading: { EN: 'Air Quality', AR: 'جودة الهواء' },
     heroDescription: {
@@ -159,6 +165,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'marine-water-quality',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/MWQ',
     title: { EN: 'Marine Water Quality', AR: 'جودة المياه البحرية' },
     heroHeading: { EN: 'Marine Water Quality', AR: 'جودة المياه البحرية' },
     heroDescription: {
@@ -174,6 +181,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'fisheries',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/FS',
     title: { EN: 'Fisheries', AR: 'الثروة السمكية' },
     heroHeading: { EN: 'Fisheries', AR: 'الثروة السمكية' },
     heroDescription: {
@@ -189,6 +197,7 @@ export const ENVIRONMENTAL_THEMES: EnvironmentalTheme[] = [
   },
   {
     id: 'protected-area',
+    portalUrl: 'https://edp.ead.ae/map/Catalogue/PA',
     title: { EN: 'Protected Area', AR: 'المحميات الطبيعية' },
     heroHeading: { EN: 'Protected Area', AR: 'المحميات الطبيعية' },
     heroDescription: {
