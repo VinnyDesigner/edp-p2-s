@@ -43,12 +43,50 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
   return (
     <footer
       id="contact"
-      className="relative w-full mt-8 pt-12 pb-6 overflow-hidden bg-gradient-to-b from-[#00222E]/65 via-[#001B25]/85 to-[#00131B]/95 backdrop-blur-md border-t border-[#27C9D0]/20"
+      className="relative w-full mt-8 pt-12 pb-6 overflow-hidden bg-gradient-to-b from-[#004658]/36 via-[#002C3A]/48 to-[#001B25]/62 backdrop-blur-2xl backdrop-saturate-150"
     >
+      {/* Subtle frosted glass ambient sheen without a top border line */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#B8FFFF]/[0.06] via-[#80F5F5]/[0.02] to-transparent"
+      />
+      {/* Translucent Aqua Tech Wave with Golden Glow — feathered & screen-blended into frosted glass */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 0.38, y: 0 }}
+        viewport={VIEWPORT_ONCE}
+        transition={{ duration: 0.9, ease: EASE_EXEC }}
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 overflow-hidden mix-blend-screen"
+        style={{
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.45) 26%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.75) 88%, transparent 100%)',
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.45) 26%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.75) 88%, transparent 100%)',
+        }}
+      >
+        <div
+          className="w-full"
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)',
+            maskImage:
+              'linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)',
+          }}
+        >
+          <img
+            src="/images/Translucent%20Aqua%20Tech%20Wave%20with%20Golden%20Glow.png"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="w-full h-[165px] sm:h-[205px] lg:h-[245px] object-cover object-center select-none saturate-[1.15] contrast-[1.06]"
+          />
+        </div>
+      </motion.div>
       {/* Subtle Illuminated Abu Dhabi Skyline Silhouette on the Right */}
       <motion.svg
         initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 0.55, y: 0 }}
+        whileInView={{ opacity: 0.35, y: 0 }}
         viewport={VIEWPORT_ONCE}
         transition={{ duration: 0.9, delay: 0.15, ease: EASE_EXEC }}
         viewBox="0 0 420 120"
@@ -74,7 +112,7 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
       <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6">
           {/* Column 1 — EAD Logo, Description & Social Icons */}
-          <RevealItem delay={0.04} distance={22} className="lg:col-span-4 lg:pr-6 lg:border-r lg:border-[#80F5F5]/15">
+          <RevealItem delay={0.04} distance={22} className="lg:col-span-4 lg:pr-6 lg:border-r lg:border-[#80F5F5]/25">
             <div className="flex items-center">
               <img
                 src="/images/ead-logo-white.png"
@@ -202,7 +240,7 @@ export const MarineFooter: React.FC<MarineFooterProps> = ({
       </div>
 
       {/* Bottom Copyright & Utilities */}
-      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-4 border-t border-[#80F5F5]/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-[#C6E4E8]/85">
+      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-4 border-t border-[#80F5F5]/25 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-[#C6E4E8]/85">
         <p>
           {lang === 'EN'
             ? '© 2026 Environment Agency – Abu Dhabi. All rights reserved.'

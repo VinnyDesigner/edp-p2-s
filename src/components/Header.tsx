@@ -44,10 +44,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 backdrop-blur-2xl backdrop-saturate-150 ${
         scrolled
-          ? 'bg-[#002C3A]/85 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,18,24,0.45)]'
-          : 'bg-gradient-to-b from-[#002C3A]/75 via-[#002C3A]/35 to-transparent'
+          ? 'bg-gradient-to-b from-[#003E4E]/72 via-[#002C3A]/68 to-[#00202B]/74'
+          : 'bg-gradient-to-b from-[#004456]/48 via-[#002C3A]/38 to-[#002430]/34'
       }`}
     >
       <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 h-[76px] flex items-center justify-between gap-4">
@@ -66,7 +66,10 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Navigation + Arabic + Login + Language Switcher */}
         <div className="hidden lg:flex items-center gap-5 xl:gap-6">
-          <nav className="flex items-center gap-1.5" aria-label="Primary navigation">
+          <nav
+            className="flex items-center gap-1.5"
+            aria-label="Primary navigation"
+          >
             {NAV_LINKS.map((item) => {
               const isActive = activeNav === item.id;
               return (
@@ -97,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => onToggleLang(lang === 'EN' ? 'AR' : 'EN')}
-            className="font-arabic text-[13.5px] font-medium text-[#C6E4E8] hover:text-[#80F5F5] transition-colors"
+            className="font-arabic rounded-full px-3 py-1.5 text-[13.5px] font-medium text-[#C6E4E8] hover:text-[#80F5F5] hover:bg-white/10 transition-all"
           >
             {lang === 'EN' ? 'عربي' : 'English'}
           </button>
@@ -106,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={onOpenLogin}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-white bg-[#003B48]/70 border border-[#80F5F5]/40 hover:border-[#00D9E8] hover:bg-[#004C59]/80 hover:shadow-[0_0_18px_rgba(0,217,232,0.35)] transition-all"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-semibold text-white bg-[#004454]/50 backdrop-blur-lg hover:bg-[#005868]/65 hover:shadow-[0_0_20px_rgba(0,217,232,0.35)] transition-all"
           >
             <User className="w-3.5 h-3.5 text-[#80F5F5]" />
             <span>{lang === 'EN' ? 'Log In' : 'تسجيل الدخول'}</span>
@@ -118,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           onClick={() => setMobileOpen((p) => !p)}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          className="lg:hidden w-10 h-10 rounded-full ocean-glass flex items-center justify-center text-white"
+          className="lg:hidden w-10 h-10 rounded-full bg-[#004454]/50 backdrop-blur-lg flex items-center justify-center text-white hover:bg-[#005868]/65 transition-colors"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -132,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.24 }}
-            className="lg:hidden bg-[#002C3A]/95 backdrop-blur-2xl border-t border-[#27C9D0]/30 overflow-hidden"
+            className="lg:hidden bg-[#002C3A]/72 backdrop-blur-2xl backdrop-saturate-150 overflow-hidden"
           >
             <div className="px-4 py-4 space-y-1.5">
               {NAV_LINKS.map((item) => {
